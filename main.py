@@ -156,9 +156,11 @@ def _a():
 
 if __name__ == '__main__':
     try:
-        gg = Grid(20, 20)
+        gg = Grid(25, 25)
+        gh = Grid(40, 10, s = " ")
         g1 = Grid(10, 10, s = "@")
         g2 = Grid(10, 10, s = "#")
+        g3 = Grid(10, 10, s = "!")
         
         g1.random(Block(_a(), 4, 4))
         g1.random(Block(_a(), 3, 3))
@@ -176,13 +178,28 @@ if __name__ == '__main__':
         g2.random(Block(_a(), 1, 1))
         g2.random(Block(_a(), 1, 1))
         
+        g3.random(Block(_a(), 4, 4))
+        g3.random(Block(_a(), 3, 3))
+        g3.random(Block(_a(), 1, 1))
+        g3.random(Block(_a(), 1, 1))
+        g3.random(Block(_a(), 3, 3))
+        g3.random(Block(_a(), 1, 1))
+        g3.random(Block(_a(), 1, 1))
+        
         gg.random(g1)
         gg.random(g2)
+        gg.random(g3)
         
-        print g1
-        print g2
+        gh.insert_block(g1, 0, 0)
+        gh.insert_block(g2, 15, 0)
+        gh.insert_block(g3, 30, 0)
         
-        print gg
+        print "SUB GRID 1 (@ is an empty cell) \n", g1
+        print "SUB GRID 2 (# is an empty cell) \n", g2
+        print "SUB GRID 3 (! is an empty cell) \n", g3
+        
+        print "SUB GRIDS (@, # and ! are empty cells)\n", gh
+        print "FINAL GRID (. is an empty cell, also inherited @, # and ! as empty cells from sub grids) \n", gg
         
     except GridException, ge:
         print "---GRID--- \n", ge.grid
