@@ -1,10 +1,11 @@
 import string
 import random
 
+DEFAULT_EMPTY_CELL = '.'
 
 class Grid(object):
-    def __init__(self, width, height):
-        self.s      = '_'
+    def __init__(self, width, height, s = None):
+        self.s      = s or DEFAULT_EMPTY_CELL
         self.width  = width
         self.height = height
         self.cells  = {}
@@ -15,10 +16,7 @@ class Grid(object):
                 self.cells[y][x] = self.default_cell(x, y)
     
     def default_cell(self, x, y):
-        return None
-    
-    def empty_cell(self, x, y):
-        return Cell(x, y, self)
+        return EmptyCell(x, y, self)
     
     def insert_block(self, block, x, y):
         self.check_block(block, x, y)
@@ -53,7 +51,7 @@ class Grid(object):
         if x not in self.cells[y]:
             raise EndOfRowException(self)
         
-        if self.cells[y][x] is not None:
+        if not isinstance(self.cells[y][x], EmptyCell):
             raise CellNotEmptyException(self)
     
     def random(self, block, x = None, y = None, xinc = None, yinc = None):
@@ -97,7 +95,7 @@ class Grid(object):
         
         for y in range(0, self.height):
             for x in range(0, self.width):
-                output += str(self.cells[y][x] or self.empty_cell(x, y))
+                output += str(self.cells[y][x] or EmptyCell(x, y, self))
             
             output += "\n"
         
@@ -106,9 +104,7 @@ class Grid(object):
 
 class Block(Grid):
     def __init__(self, s, width, height):
-        super(Block, self).__init__(width, height)
-        
-        self.s = s
+        super(Block, self).__init__(width, height, s = s)
     
     def default_cell(self, x, y):
         return Cell(x, y, self)
@@ -121,7 +117,11 @@ class Cell(object):
         self.parent = parent
 
     def __str__(self):
-        return self.parent.s or '.'
+        return self.parent.s or DEFAULT_EMPTY_CELL
+
+
+class EmptyCell(Cell):
+    pass
 
 
 class GridException(Exception):
@@ -156,20 +156,33 @@ def _a():
 
 if __name__ == '__main__':
     try:
-        g = Grid(10, 10)
+        gg = Grid(20, 20)
+        g1 = Grid(10, 10, s = "@")
+        g2 = Grid(10, 10, s = "#")
         
-        g.random(Block(_a(), 4, 4))
-        g.random(Block(_a(), 4, 4))
-        g.random(Block(_a(), 3, 3))
-        g.random(Block(_a(), 3, 3))
-        g.random(Block(_a(), 1, 1))
-        g.random(Block(_a(), 1, 1))
-        g.random(Block(_a(), 3, 3))
-        g.random(Block(_a(), 3, 3))
-        g.random(Block(_a(), 1, 1))
-        g.random(Block(_a(), 1, 1))
+        g1.random(Block(_a(), 4, 4))
+        g1.random(Block(_a(), 3, 3))
+        g1.random(Block(_a(), 1, 1))
+        g1.random(Block(_a(), 1, 1))
+        g1.random(Block(_a(), 3, 3))
+        g1.random(Block(_a(), 1, 1))
+        g1.random(Block(_a(), 1, 1))
         
-        print g
+        g2.random(Block(_a(), 4, 4))
+        g2.random(Block(_a(), 3, 3))
+        g2.random(Block(_a(), 1, 1))
+        g2.random(Block(_a(), 1, 1))
+        g2.random(Block(_a(), 3, 3))
+        g2.random(Block(_a(), 1, 1))
+        g2.random(Block(_a(), 1, 1))
+        
+        gg.random(g1)
+        gg.random(g2)
+        
+        print g1
+        print g2
+        
+        print gg
         
     except GridException, ge:
         print "---GRID--- \n", ge.grid
