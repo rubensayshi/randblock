@@ -1,0 +1,15 @@
+{# grid, cell_width, cell_height #}
+{% set cell_width  = cell_width  or 40 %}
+{% set cell_height = cell_height or 40 %}
+{% set cells  = grid.width %}
+{% set rows   = grid.height %}
+
+<div class="container" style="width: {{ cell_width * cells }}px; height: {{ cell_height * rows }}px;">
+    {% for block in grid.blocks %}
+        <div class="block" style="background-color: {{ block.s }};
+                                  top    : {{ block.y * cell_height }}px;
+                                  left   : {{ block.x * cell_width }}px;
+                                  width  : {{ block.width * cell_width }}px;
+                                  height : {{ block.height * cell_height }}px;"></div>
+    {% endfor %}
+</div>

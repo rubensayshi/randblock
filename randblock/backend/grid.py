@@ -8,6 +8,7 @@ class Grid(object):
         self.s      = s or DEFAULT_EMPTY_CELL
         self.width  = width
         self.height = height
+        self.blocks = []
         self.cells  = {}
         
         for y in range(0, self.height):
@@ -27,6 +28,10 @@ class Grid(object):
                 newy = y + h
                 cell = block.cells[h][w]
                 self.insert_cell(cell, newx, newy)
+        
+        block.x = x
+        block.y = y
+        self.blocks.append(block)
     
     def insert_cell(self, cell, x, y):
         self.check_cell(x, y)
