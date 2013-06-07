@@ -69,8 +69,20 @@ class Size(object):
     def surface(self):
         return self.size * self.size
 
+articles = None
+def get_articles():
+    global articles
+    if  not articles:
+        with open('./articles.json') as f:
+            articles = json.loads(f.read())
+    
+    return articles
+
 @main.route('/')
 def index():
+    articles = copy(get_articles())
+    articles.reverse()
+    
     try:
         s = Sizes(20)
         large  = s.add_size(5, count      = 4)
@@ -80,13 +92,20 @@ def index():
         
         grid = Grid(20, 20, s = "!")
         
-        for i in range(0, large.count):
-            grid.random(Block('red', large.size, large.size))
+        if large.count == 4:
+            grid.random(Block(articles.pop(), large.size, large.size), 2, 3)
+            grid.random(Block(articles.pop(), large.size, large.size), 11, 4)
+            grid.random(Block(articles.pop(), large.size, large.size), 2, 11)
+            grid.random(Block(articles.pop(), large.size, large.size), 12, 12)
+        
         for i in range(0, medium.count):
-            grid.random(Block('blue', medium.size, medium.size))
+            grid.random(Block(articles.pop(), medium.size, medium.size))
         for i in range(0, small.count):
-            print "BLOCK"
-            grid.random(Block('green', small.size, small.size), 1, 0)
+            grid.random(Block(articles.pop(), small.size, small.size))
+        for i in range(0, filler.count):
+            grid.random(Block(articles.pop(), filler.size, filler.size))
+    
+        print len(articles)
     
         return render_template("index.html", grid = grid)        
     except GridException, ge:

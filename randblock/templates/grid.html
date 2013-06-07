@@ -17,11 +17,14 @@
     </div>
     <div class="blocks-container">
         {% for block in grid.blocks %}
-            <div class="block" style="background-color: {{ block.s }};
+            <a href="{{ block.s.link }}"
+               title="{{ block.s.title }} [{{ block.s.total }} social activity]"
+                               class="block"
+                               style="background-image: url({{ block.s.thmb }});
                                       top    : {{ block.y * cell_height }}px;
                                       left   : {{ block.x * cell_width }}px;
                                       width  : {{ block.width * cell_width }}px;
-                                      height : {{ block.height * cell_height }}px;"></div>
+                                      height : {{ block.height * cell_height }}px;"></a>
         {% endfor %}
     </div>
 </div>
