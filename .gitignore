@@ -1,0 +1,7 @@
+.buildpath
+.pydevproject
+.settings
+.project
+*.pyc
+env
+node_modules

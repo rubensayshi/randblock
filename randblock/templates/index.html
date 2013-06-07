@@ -1,0 +1,7 @@
+{% extends "wrapper.html" %}
+
+{% block content %}
+    {% with grid = grid, cell_width = 40, cell_height = 40 %}
+        {% include "grid.html" %}
+    {% endwith %}
+{% endblock %}
