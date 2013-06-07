@@ -5,11 +5,23 @@
 {% set rows   = grid.height %}
 
 <div class="container" style="width: {{ cell_width * cells }}px; height: {{ cell_height * rows }}px;">
-    {% for block in grid.blocks %}
-        <div class="block" style="background-color: {{ block.s }};
-                                  top    : {{ block.y * cell_height }}px;
-                                  left   : {{ block.x * cell_width }}px;
-                                  width  : {{ block.width * cell_width }}px;
-                                  height : {{ block.height * cell_height }}px;"></div>
-    {% endfor %}
+    <div class="cells-container">
+        {% for x in range(0, cells) %}
+            {% for y in range(0, rows) %}
+                <div class="cell" style="top    : {{ y * cell_height }}px;
+                                         left   : {{ x * cell_width }}px;
+                                         width  : {{ cell_width -2 }}px;
+                                         height : {{ cell_height -2 }}px;"></div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+    <div class="blocks-container">
+        {% for block in grid.blocks %}
+            <div class="block" style="background-color: {{ block.s }};
+                                      top    : {{ block.y * cell_height }}px;
+                                      left   : {{ block.x * cell_width }}px;
+                                      width  : {{ block.width * cell_width }}px;
+                                      height : {{ block.height * cell_height }}px;"></div>
+        {% endfor %}
+    </div>
 </div>

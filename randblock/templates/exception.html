@@ -1,7 +1,7 @@
 {% extends "wrapper.html" %}
 
 {% block content %}
-    <h1>Exception :-(</h1>
+    <h1>{{ ge }}</h1>
     <h3>Grid</h3>
     {% with grid = ge.grid, cell_width = 40, cell_height = 40 %}
         {% include "grid.html" %}

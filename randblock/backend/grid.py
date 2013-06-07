@@ -50,27 +50,30 @@ class Grid(object):
             raise ge
     
     def check_cell(self, x, y):
-        if y not in self.cells:
+        
+        if (x >= self.width and y >= (self.height - 1)) \
+          or (x >= (self.width - 1) and y >= self.height):
+            raise EndOfGridException(self)
+        
+        if y >= self.height:
             raise EndOfColException(self)
         
-        if x not in self.cells[y]:
+        if x >= self.width:
             raise EndOfRowException(self)
         
         if not isinstance(self.cells[y][x], EmptyCell):
             raise CellNotEmptyException(self)
     
-    def random(self, block, x = None, y = None, xinc = None, yinc = None):
+    def random(self, block, x = None, y = None, inc = None):
         if x is None:
             x = random.randint(0, self.width)
         if y is None:
             y = random.randint(0, self.height)
         
-        if xinc is None:
-            xinc = 0
-        if yinc is None:
-            yinc = 0
+        if inc is None:
+            inc = 0
         
-        if xinc > self.width and yinc > self.height:
+        if inc > (self.width * self.height):
             raise EndOfGridException(self, block)
         
         try:
@@ -80,20 +83,22 @@ class Grid(object):
             self.random(block, 
                         x = x + 1, 
                         y = 0, 
-                        xinc = xinc + 1, 
-                        yinc = yinc)
+                        inc = inc)
         except EndOfRowException:
             self.random(block, 
                         x = 0, 
                         y = y + 1, 
-                        xinc = xinc + 0, 
-                        yinc = yinc + 1)
+                        inc = inc)
+        except EndOfGridException:
+            self.random(block, 
+                        x = 0, 
+                        y = 0, 
+                        inc = inc)
         except CellNotEmptyException:
             self.random(block, 
                         x = x + 1, 
                         y = y, 
-                        xinc = xinc + 1, 
-                        yinc = yinc)
+                        inc = inc + 1)
     
     def __str__(self):
         output = ""
@@ -133,6 +138,9 @@ class GridException(Exception):
     def __init__(self, grid, block = None):
         self.grid  = grid
         self.block = block
+
+    def __str__(self):
+        return str(self.__class__)
 
 
 class CellNotEmptyException(GridException):
